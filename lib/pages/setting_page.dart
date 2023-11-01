@@ -21,32 +21,51 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("设置"),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 4, bottom: 32),
-        children: [
-          ListTile(
-            leading: const Icon(Icons.dark_mode_outlined),
-            title: const Text("主题背景"),
-            subtitle:
-                Text(_themeList[context.watch<ThemeProvider>().themeMode]),
-            onTap: _setThemeMode,
+      body: Align(
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width > 600
+              ? 600
+              : MediaQuery.of(context).size.width,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text("设置"),
+            ),
+            body: ListView(
+              padding: const EdgeInsets.only(top: 4, bottom: 32),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.dark_mode_outlined),
+                  title: const Text("主题背景"),
+                  subtitle: Text(
+                      _themeList[context.watch<ThemeProvider>().themeMode]),
+                  onTap: _setThemeMode,
+                ),
+                SwitchListTile(
+                  value: _copyWhenLongPress,
+                  onChanged: (value) {
+                    setState(() {
+                      _copyWhenLongPress = value;
+                    });
+                    prefs.setBool("copyWhenLongPress", value);
+                  },
+                  secondary: const Icon(Icons.copy_outlined),
+                  title: const Text("长按复制"),
+                  subtitle: const Text("长按结果时自动复制到剪贴板"),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 24),
+                  child: Center(
+                    child: SelectableText(
+                      "Develop by liuyuxin with flutter\nhttps://github.com/gvenusleo/ganzhi",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          SwitchListTile(
-            value: _copyWhenLongPress,
-            onChanged: (value) {
-              setState(() {
-                _copyWhenLongPress = value;
-              });
-              prefs.setBool("copyWhenLongPress", value);
-            },
-            secondary: const Icon(Icons.copy_outlined),
-            title: const Text("长按复制"),
-            subtitle: const Text("长按结果时自动复制到剪贴板"),
-          ),
-        ],
+        ),
       ),
     );
   }

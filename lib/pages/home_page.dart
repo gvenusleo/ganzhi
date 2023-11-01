@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ganzhi/global.dart';
@@ -37,357 +38,356 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("天干地支换算"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingPage(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings_outlined),
+      body: Align(
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width > 600
+              ? 600
+              : MediaQuery.of(context).size.width,
+          child: Scaffold(
+            appBar: buildAppBar(),
+            body: buildBody(),
           ),
-        ],
+        ),
       ),
-      body: Column(
-        children: [
-          TableCalendar(
-            focusedDay: DateTime(
-              _lunar.getSolar().getYear(),
-              _lunar.getSolar().getMonth(),
-              _lunar.getSolar().getDay(),
-            ),
-            firstDay: DateTime(1),
-            lastDay: DateTime(9999),
-            locale: "zh",
-            selectedDayPredicate: (day) {
-              return isSameDay(
-                  DateTime(
-                    _lunar.getSolar().getYear(),
-                    _lunar.getSolar().getMonth(),
-                    _lunar.getSolar().getDay(),
-                  ),
-                  day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _lunar = Lunar.fromDate(selectedDay);
-              });
-              _getData();
-            },
-            rowHeight: 36,
-            daysOfWeekHeight: 24,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              headerPadding: EdgeInsets.all(0),
-            ),
-            calendarStyle: CalendarStyle(
-              selectedDecoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                shape: BoxShape.circle,
+    );
+  }
+
+  PreferredSizeWidget buildAppBar() {
+    return AppBar(
+      title: const Text("天干地支换算"),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => const SettingPage(),
               ),
-              todayDecoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1,
-                ),
-                shape: BoxShape.circle,
-              ),
-              todayTextStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              cellMargin: const EdgeInsets.all(0),
-              cellPadding: const EdgeInsets.all(0),
-            ),
+            );
+          },
+          icon: const Icon(Icons.settings_outlined),
+        ),
+      ],
+    );
+  }
+
+  Widget buildBody() {
+    return Column(
+      children: [
+        TableCalendar(
+          focusedDay: DateTime(
+            _lunar.getSolar().getYear(),
+            _lunar.getSolar().getMonth(),
+            _lunar.getSolar().getDay(),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.fromLTRB(18, 12, 18, 32),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("公历"),
-                      trailing: Text(
-                        "${_lunar.getSolar().getYear()}年${_lunar.getSolar().getMonth()}月${_lunar.getSolar().getDay()}日",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: _setGongli,
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text:
-                                    "${_lunar.getSolar().getYear()}年${_lunar.getSolar().getMonth()}月${_lunar.getSolar().getDay()}日",
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+          firstDay: DateTime(1),
+          lastDay: DateTime(9999),
+          locale: "zh",
+          selectedDayPredicate: (day) {
+            return isSameDay(
+                DateTime(
+                  _lunar.getSolar().getYear(),
+                  _lunar.getSolar().getMonth(),
+                  _lunar.getSolar().getDay(),
+                ),
+                day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            setState(() {
+              _lunar = Lunar.fromDate(selectedDay);
+            });
+            _getData();
+          },
+          rowHeight: 36,
+          daysOfWeekHeight: 24,
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          headerStyle: const HeaderStyle(
+            formatButtonVisible: false,
+            titleCentered: true,
+            headerPadding: EdgeInsets.all(0),
+          ),
+          calendarStyle: CalendarStyle(
+            selectedDecoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            todayDecoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 1,
+              ),
+              shape: BoxShape.circle,
+            ),
+            todayTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            cellMargin: const EdgeInsets.all(0),
+            cellPadding: const EdgeInsets.all(0),
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              margin: const EdgeInsets.fromLTRB(18, 12, 18, 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("公历"),
+                    trailing: Text(
+                      "${_lunar.getSolar().getYear()}年${_lunar.getSolar().getMonth()}月${_lunar.getSolar().getDay()}日",
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    _divder,
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("农历"),
-                      trailing: Text(
-                        _nongli,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: _setNongli,
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text: _nongli,
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+                    onTap: _setGongli,
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text:
+                                  "${_lunar.getSolar().getYear()}年${_lunar.getSolar().getMonth()}月${_lunar.getSolar().getDay()}日",
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  _divder,
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("农历"),
+                    trailing: Text(
+                      _nongli,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    _divder,
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("干支（年）"),
-                      trailing: Text(
-                        _yearGanZhi,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: () => _setGanzhi("年"),
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text: _yearGanZhi,
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+                    onTap: _setNongli,
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text: _nongli,
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  _divder,
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("干支（年）"),
+                    trailing: Text(
+                      _yearGanZhi,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    _divder,
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("干支（月）"),
-                      trailing: Text(
-                        _monthGanZhi,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: () => _setGanzhi("月"),
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text: _monthGanZhi,
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+                    onTap: () => _setGanzhi("年"),
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text: _yearGanZhi,
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  _divder,
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("干支（月）"),
+                    trailing: Text(
+                      _monthGanZhi,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    _divder,
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("干支（日）"),
-                      trailing: Text(
-                        _dayGanZhi,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onTap: () => _setGanzhi("日"),
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text: _dayGanZhi,
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+                    onTap: () => _setGanzhi("月"),
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text: _monthGanZhi,
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  _divder,
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("干支（日）"),
+                    trailing: Text(
+                      _dayGanZhi,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    _divder,
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 24),
-                      title: const Text("月相"),
-                      trailing: Text(
-                        _yuexiang,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
-                          ? () {
-                              final data = ClipboardData(
-                                text: _yuexiang,
-                              );
-                              Clipboard.setData(data);
-                              ScaffoldMessenger.of(context).clearSnackBars();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("已复制到剪贴板"),
-                                  behavior: SnackBarBehavior.floating,
-                                ),
-                              );
-                            }
-                          : null,
+                    onTap: () => _setGanzhi("日"),
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text: _dayGanZhi,
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  _divder,
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                    title: const Text("月相"),
+                    trailing: Text(
+                      _yuexiang,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 8,
-                      ),
-                      child: Text(
-                        "干支锁定查找",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 16,
-                        ),
-                      ),
+                    onLongPress: (prefs.getBool("copyWhenLongPress") ?? true)
+                        ? () {
+                            final data = ClipboardData(
+                              text: _yuexiang,
+                            );
+                            Clipboard.setData(data);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("已复制到剪贴板"),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        : null,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 8,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      child: Wrap(
-                        spacing: 12,
-                        runSpacing: 4,
-                        children: [
-                          FilterChip(
-                            label: const Text("年"),
-                            selected: _suoding.contains("年"),
-                            onSelected: (value) {
-                              if (value == false && _suoding.length == 2) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("干支锁定至少为 2 个"),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (_suoding.contains("年")) {
-                                setState(() {
-                                  _suoding.remove("年");
-                                });
-                              } else {
-                                setState(() {
-                                  _suoding.add("年");
-                                });
-                              }
-                            },
-                          ),
-                          FilterChip(
-                            label: const Text("月"),
-                            selected: _suoding.contains("月"),
-                            onSelected: (value) {
-                              if (value == false && _suoding.length == 2) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("干支锁定至少为 2 个"),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (_suoding.contains("月")) {
-                                setState(() {
-                                  _suoding.remove("月");
-                                });
-                              } else {
-                                setState(() {
-                                  _suoding.add("月");
-                                });
-                              }
-                            },
-                          ),
-                          FilterChip(
-                            label: const Text("日"),
-                            selected: _suoding.contains("日"),
-                            onSelected: (value) {
-                              if (value == false && _suoding.length == 2) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("干支锁定至少为 2 个"),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (_suoding.contains("日")) {
-                                setState(() {
-                                  _suoding.remove("日");
-                                });
-                              } else {
-                                setState(() {
-                                  _suoding.add("日");
-                                });
-                              }
-                            },
-                          ),
-                        ],
+                    child: Text(
+                      "干支锁定查找",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 18),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Wrap(
+                      spacing: 12,
+                      runSpacing: 4,
                       children: [
-                        IconButton.outlined(
-                            onPressed: () {
-                              String result = _getLast();
-                              if (result != "success") {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(result),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                              }
-                            },
-                            icon: const Icon(Icons.arrow_back_ios_outlined)),
-                        IconButton.outlined(
+                        FilterChip(
+                          label: const Text("年"),
+                          selected: _suoding.contains("年"),
+                          onSelected: (value) {
+                            if (value == false && _suoding.length == 2) {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("干支锁定至少为 2 个"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              return;
+                            }
+                            if (_suoding.contains("年")) {
+                              setState(() {
+                                _suoding.remove("年");
+                              });
+                            } else {
+                              setState(() {
+                                _suoding.add("年");
+                              });
+                            }
+                          },
+                        ),
+                        FilterChip(
+                          label: const Text("月"),
+                          selected: _suoding.contains("月"),
+                          onSelected: (value) {
+                            if (value == false && _suoding.length == 2) {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("干支锁定至少为 2 个"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              return;
+                            }
+                            if (_suoding.contains("月")) {
+                              setState(() {
+                                _suoding.remove("月");
+                              });
+                            } else {
+                              setState(() {
+                                _suoding.add("月");
+                              });
+                            }
+                          },
+                        ),
+                        FilterChip(
+                          label: const Text("日"),
+                          selected: _suoding.contains("日"),
+                          onSelected: (value) {
+                            if (value == false && _suoding.length == 2) {
+                              ScaffoldMessenger.of(context).clearSnackBars();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("干支锁定至少为 2 个"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              return;
+                            }
+                            if (_suoding.contains("日")) {
+                              setState(() {
+                                _suoding.remove("日");
+                              });
+                            } else {
+                              setState(() {
+                                _suoding.add("日");
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton.outlined(
                           onPressed: () {
-                            String result = _getNext();
+                            String result = _getLast();
                             if (result != "success") {
                               ScaffoldMessenger.of(context).clearSnackBars();
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -398,18 +398,31 @@ class _HomePageState extends State<HomePage> {
                               );
                             }
                           },
-                          icon: const Icon(Icons.arrow_forward_ios_outlined),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                ),
+                          icon: const Icon(Icons.arrow_back_ios_outlined)),
+                      IconButton.outlined(
+                        onPressed: () {
+                          String result = _getNext();
+                          if (result != "success") {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(result),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios_outlined),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
