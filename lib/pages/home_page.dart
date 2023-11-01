@@ -459,8 +459,8 @@ class _HomePageState extends State<HomePage> {
                   List<String> dateList = control.text.split("-").toList();
                   final date = DateTime.parse(
                       "${dateList[0].padLeft(4, "0")}-${dateList[1].padLeft(2, "0")}-${dateList[2].padLeft(2, "0")}");
-                  if (date.isBefore(DateTime(9999)) &&
-                      date.isAfter(DateTime(1))) {
+                  if (!date.isAfter(DateTime(9999, 12, 31)) &&
+                      !date.isBefore(DateTime(1, 1, 1))) {
                     setState(() {
                       _lunar = Lunar.fromDate(date);
                     });
@@ -533,10 +533,12 @@ class _HomePageState extends State<HomePage> {
                     int.parse(dateList[1]),
                     int.parse(dateList[2]),
                   );
-                  if (lunar
+                  if (!lunar
                           .getSolar()
-                          .isBefore(Solar.fromDate(DateTime(9999))) &&
-                      lunar.getSolar().isAfter(Solar.fromDate(DateTime(1)))) {
+                          .isAfter(Solar.fromDate(DateTime(9999, 12, 31))) &&
+                      !lunar
+                          .getSolar()
+                          .isBefore(Solar.fromDate(DateTime(1, 1, 1)))) {
                     setState(() {
                       _lunar = lunar;
                     });
@@ -769,8 +771,8 @@ class _HomePageState extends State<HomePage> {
           lunar.getSolar().getMonth(),
           lunar.getSolar().getDay(),
         );
-        if (date.isAfter(DateTime(1, 1, 1)) &&
-            date.isBefore(DateTime(9999, 12, 31))) {
+        if (!date.isBefore(DateTime(1, 1, 1)) &&
+            !date.isAfter(DateTime(9999, 12, 31))) {
           setState(() {
             _lunar = lunar;
           });
@@ -799,8 +801,8 @@ class _HomePageState extends State<HomePage> {
         lunar = Lunar.fromYmd(lunar.getYear() + 59, 1, 1);
       }
       final date = lunar.getSolar();
-      if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-          date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+      if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+          !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
         return "$_yearGanZhi年不存在$ganzhi月";
       }
     }
@@ -824,8 +826,8 @@ class _HomePageState extends State<HomePage> {
         lunar = Lunar.fromYmd(lunar.getYear() + 59, 1, 1);
       }
       final date = lunar.getSolar();
-      if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-          date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+      if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+          !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
         return "$_yearGanZhi年$_monthGanZhi月不存在$ganzhi日";
       }
     }
@@ -853,8 +855,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() + 59, 1, 1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -875,8 +877,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() + 59, 1, 1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -897,8 +899,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() + 59, 1, 1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -916,8 +918,8 @@ class _HomePageState extends State<HomePage> {
             lunar = lunar.next(1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -949,8 +951,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() - 58, 1, 1).next(-1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在上一个";
           }
         }
@@ -971,8 +973,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() - 58, 1, 1).next(-1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -993,8 +995,8 @@ class _HomePageState extends State<HomePage> {
             lunar = Lunar.fromYmd(lunar.getYear() - 58, 1, 1).next(-1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
@@ -1012,8 +1014,8 @@ class _HomePageState extends State<HomePage> {
             lunar = lunar.next(-1);
           }
           final date = lunar.getSolar();
-          if (date.isBefore(Solar.fromYmd(1, 1, 1)) ||
-              date.isAfter(Solar.fromYmd(9999, 12, 31))) {
+          if (!date.isAfter(Solar.fromYmd(1, 1, 1)) ||
+              !date.isBefore(Solar.fromYmd(9999, 12, 31))) {
             return "不存在下一个";
           }
         }
